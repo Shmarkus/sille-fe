@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {IdentifyService} from './services/api/backend-client';
 import {ToastrService} from 'ngx-toastr';
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-root',
@@ -14,8 +15,11 @@ export class AppComponent {
   searching = false;
   threshold = 0.899;
 
-  constructor(private identifyService: IdentifyService, private toastr: ToastrService) {
-  }
+  constructor(
+    private identifyService: IdentifyService,
+    private toastr: ToastrService,
+    private domSanitizer: DomSanitizer
+  ) { }
 
   handleFileInput(event: any): void {
     // @ts-ignore
@@ -61,6 +65,10 @@ export class AppComponent {
   }
   changeThreshold(event: any): void {
     this.threshold = event.target.value;
+  }
+
+  getSafeUrl(url: string): any {
+    return  this.domSanitizer.bypassSecurityTrustResourceUrl('file://' + url);
   }
 
 }
