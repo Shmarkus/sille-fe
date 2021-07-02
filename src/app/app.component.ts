@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import {IdentifyService} from './services/api/backend-client';
-import {Event} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +25,12 @@ export class AppComponent {
     if (item !== null && item !== undefined) {
       this.originalFile = item;
       if (this.originalFile !== undefined) {
-        fileReader.onloadend = e => (this.fileToUpload = fileReader.result);
+        fileReader.onloadend = e => {
+          // @ts-ignore
+          this.identifyService.detectFace({image: fileReader.result}).toPromise()
+            .then(() => (this.fileToUpload = fileReader.result))
+            .catch(console.error);
+        };
         fileReader.readAsDataURL(this.originalFile);
       }
     }
@@ -35,7 +39,7 @@ export class AppComponent {
   search(): void {
     this.searching = true;
     if (this.fileToUpload) {
-      this.identifyService.findFace(this.threshold, { image: this.fileToUpload}).toPromise().then(paths => {
+      this.identifyService.findSimilar(this.threshold, { image: this.fileToUpload}).toPromise().then(paths => {
         console.log(paths);
         if (paths.images != null && paths.images.length > 0) {
           this.results = paths.images;

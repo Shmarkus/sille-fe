@@ -5,7 +5,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {ApiModule, Configuration } from './services/api/backend-client';
 import {environment} from '../environments/environment';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {ToastrModule} from 'ngx-toastr';
+import {ErrorHandlerInterceptor} from './services/interceptor/errorhandler.interceptor';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 export function apiModuleConfigurationFactory(): Configuration {
   return new Configuration({
@@ -20,9 +24,17 @@ export function apiModuleConfigurationFactory(): Configuration {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ApiModule.forRoot(apiModuleConfigurationFactory)
+    ApiModule.forRoot(apiModuleConfigurationFactory),
+    NgbModule,
+    ToastrModule.forRoot(), // ToastrModule added
+    BrowserAnimationsModule, // ToastrModule required animations module
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorHandlerInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
