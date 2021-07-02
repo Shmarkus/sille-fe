@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {IdentifyService} from './services/api/backend-client';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ export class AppComponent {
   searching = false;
   threshold = 0.899;
 
-  constructor(private identifyService: IdentifyService) {
+  constructor(private identifyService: IdentifyService, private toastr: ToastrService) {
   }
 
   handleFileInput(event: any): void {
@@ -29,7 +30,11 @@ export class AppComponent {
           // @ts-ignore
           this.identifyService.detectFace({image: fileReader.result}).toPromise()
             .then(() => (this.fileToUpload = fileReader.result))
-            .catch(console.error);
+            .catch(err => {
+              if (err.code === 404) {
+                this.toastr.warning('No faces found in uploaded photo. Please try another!', 'No faces', {positionClass: 'toast-bottom-full-width'});
+              }
+            });
         };
         fileReader.readAsDataURL(this.originalFile);
       }
