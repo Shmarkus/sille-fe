@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {IdentifyService} from './services/api/backend-client';
+import {IdentifyService, Result} from './services/api/backend-client';
 import {ToastrService} from 'ngx-toastr';
 import {DomSanitizer} from "@angular/platform-browser";
 
@@ -11,7 +11,7 @@ import {DomSanitizer} from "@angular/platform-browser";
 export class AppComponent {
   fileToUpload: any;
   originalFile?: File;
-  results: Array<string> = [];
+  results: Array<Result> = [];
   searching = false;
   threshold = 0.899;
 
@@ -46,10 +46,10 @@ export class AppComponent {
   }
 
   search(): void {
+    this.results = [];
     this.searching = true;
     if (this.fileToUpload) {
       this.identifyService.findSimilar(this.threshold, { image: this.fileToUpload}).toPromise().then(paths => {
-        console.log(paths);
         if (paths.images != null && paths.images.length > 0) {
           this.results = paths.images;
         }
@@ -63,12 +63,22 @@ export class AppComponent {
       this.results = [];
     }
   }
+
+  clear(): void {
+    this.results = [];
+    this.originalFile = undefined;
+    this.fileToUpload = null;
+  }
+
   changeThreshold(event: any): void {
     this.threshold = event.target.value;
   }
 
-  getSafeUrl(url: string): any {
-    return  this.domSanitizer.bypassSecurityTrustResourceUrl('file://' + url);
+  getSafeUrl(url: string | undefined): any {
+    if (url == undefined) {
+      return ""
+    }
+    return  this.domSanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
 }

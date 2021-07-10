@@ -73,8 +73,26 @@ definitions:
         type: array
         description: Paths to images where person was found
         items:
-          type: string
-          example: '/mnt/sdcard/image.jpg'
+          $ref: "#/definitions/Result"
+  Result:
+    type: object
+    description: Data about the image with found match
+    properties:
+      path:
+        type: string
+        example: '/mnt/sdcard/image.jpg'
+      fileSize:
+        type: number
+        example: 189
+      createdDate:
+        type: number
+        example: 1605428773
+      width:
+        type: number
+        example: 820
+      height:
+        type: number
+        example: 480
   Request:
     type: object
     properties:
