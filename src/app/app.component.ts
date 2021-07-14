@@ -53,11 +53,18 @@ export class AppComponent {
         if (paths.images != null && paths.images.length > 0) {
           paths.images.map(value => {
             if (value.createdDate !== undefined) {
-              value.createdDate = Math.floor(value.createdDate);
+              value.createdDate = Math.floor(value.createdDate) * 1000;
             }
             this.results.push(value);
           });
         }
+        this.results.sort((a, b) => {
+          if ((a.threshold !== undefined && b.threshold !== undefined) && a.threshold >= b.threshold) {
+            return 1;
+          } else {
+            return -1;
+          }
+        })
         this.searching = false;
       }).catch(e => {
         console.error(e);

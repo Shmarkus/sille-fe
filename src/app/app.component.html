@@ -36,15 +36,18 @@
         <div class="col-2">
           <img [src]="getSafeUrl(file.path)" class="img-thumbnail" alt="result">
         </div>
-        <div class="col">
-          <a href="{{file.path}}" target="_blank">http://localhost/{{file.path}}</a>
-          <ul>
-            <li><span *ngIf="file !== undefined && file.fileSize !== undefined">{{file.fileSize / 1024 / 1024 | number:'1.2'}} Mb</span></li>
-            <li><span *ngIf="file?.createdDate !== null">{{file.createdDate | date:'medium'}}</span></li>
-            <li>{{file.width}}x{{file.height}}</li>
-            <li>{{file.threshold}}</li>
-          </ul>
-        </div>
+        <dl class="col-10">
+          <dt class="col-sm-3">Link</dt>
+          <dd class="col-sm-9"><a href="{{file.path}}" target="_blank">http://localhost/{{file.path}}</a></dd>
+          <dt class="col-sm-3">Created</dt>
+          <dd class="col-sm-9" *ngIf="file?.createdDate !== null">{{file.createdDate | date:'medium'}}</dd>
+          <dt class="col-sm-3">File size</dt>
+          <dd class="col-sm-9" *ngIf="file !== undefined && file.fileSize !== undefined">{{file.fileSize / 1024 / 1024 | number:'1.2'}} MB</dd>
+          <dt class="col-sm-3">Dimensions</dt>
+          <dd class="col-sm-9">{{file.width}}x{{file.height}}</dd>
+          <dt class="col-sm-3">Face similarity</dt>
+          <dd class="col-sm-9" *ngIf="file.threshold !== undefined"><ngb-progressbar [value]="100 - (file.threshold * 10)" [showValue]="true"></ngb-progressbar></dd>
+        </dl>
       </div>
     </div>
   </div>
