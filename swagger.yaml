@@ -93,6 +93,9 @@ definitions:
       height:
         type: number
         example: 480
+      threshold:
+        type: number
+        example: 0.52
   Request:
     type: object
     properties:

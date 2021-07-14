@@ -51,7 +51,12 @@ export class AppComponent {
     if (this.fileToUpload) {
       this.identifyService.findSimilar(this.threshold, { image: this.fileToUpload}).toPromise().then(paths => {
         if (paths.images != null && paths.images.length > 0) {
-          this.results = paths.images;
+          paths.images.map(value => {
+            if (value.createdDate !== undefined) {
+              value.createdDate = Math.floor(value.createdDate);
+            }
+            this.results.push(value);
+          });
         }
         this.searching = false;
       }).catch(e => {

@@ -39,9 +39,10 @@
         <div class="col">
           <a href="{{file.path}}" target="_blank">http://localhost/{{file.path}}</a>
           <ul>
-            <li>{{file.fileSize}}</li>
-            <li>{{file.createdDate}}</li>
+            <li><span *ngIf="file !== undefined && file.fileSize !== undefined">{{file.fileSize / 1024 / 1024 | number:'1.2'}} Mb</span></li>
+            <li><span *ngIf="file?.createdDate !== null">{{file.createdDate | date:'medium'}}</span></li>
             <li>{{file.width}}x{{file.height}}</li>
+            <li>{{file.threshold}}</li>
           </ul>
         </div>
       </div>
