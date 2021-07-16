@@ -103,3 +103,7 @@ definitions:
         type: string
         description: Base64 encoded image
         example: "data:image/png;base64,iVB.."
+      path:
+        type: string
+        description: Path to search in (a file or a folder)
+        example: "images/DSCM001.jpg"

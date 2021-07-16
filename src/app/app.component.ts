@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {IdentifyService, Result} from './services/api/backend-client';
 import {ToastrService} from 'ngx-toastr';
 import {DomSanitizer} from "@angular/platform-browser";
+import {environment} from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -49,7 +50,7 @@ export class AppComponent {
     this.results = [];
     this.searching = true;
     if (this.fileToUpload) {
-      this.identifyService.findSimilar(this.threshold, { image: this.fileToUpload}).toPromise().then(paths => {
+      this.identifyService.findSimilar(this.threshold, { image: this.fileToUpload, path: environment.path}).toPromise().then(paths => {
         if (paths.images != null && paths.images.length > 0) {
           paths.images.map(value => {
             if (value.createdDate !== undefined) {
