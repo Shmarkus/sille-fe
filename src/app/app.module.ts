@@ -10,6 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {ToastrModule} from 'ngx-toastr';
 import {ErrorHandlerInterceptor} from './services/interceptor/errorhandler.interceptor';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {FormsModule} from "@angular/forms";
 
 export function apiModuleConfigurationFactory(): Configuration {
   return new Configuration({
@@ -20,15 +21,17 @@ export function apiModuleConfigurationFactory(): Configuration {
   declarations: [
     AppComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    ApiModule.forRoot(apiModuleConfigurationFactory),
-    NgbModule,
-    ToastrModule.forRoot(), // ToastrModule added
-    BrowserAnimationsModule, // ToastrModule required animations module
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        ApiModule.forRoot(apiModuleConfigurationFactory),
+        NgbModule,
+        ToastrModule.forRoot(), // ToastrModule added
+        BrowserAnimationsModule,
+        FormsModule,
+        // ToastrModule required animations module
+    ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

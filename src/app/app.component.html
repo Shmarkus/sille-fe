@@ -1,8 +1,8 @@
 <div class="container">
   <div class="row">
-    <div class="col-3" *ngIf="fileToUpload">
+    <div class="col-3" *ngIf="face">
       <p>Searching similar faces:</p>
-      <img [src]="fileToUpload" class="img-thumbnail" alt="Person to search" *ngIf="fileToUpload">
+      <img [src]="face" class="img-thumbnail" alt="Person to search" *ngIf="face">
     </div>
     <div class="col mt-2">
       <form>
@@ -14,8 +14,8 @@
           <label for="threshold" class="form-label">Threshold</label>
           <input type="number" class="form-control" id="threshold" value="0.899" (change)="changeThreshold($event)">
         </div>
-        <input *ngIf="!searching" class="btn btn-primary btn-block" type="button" value="Search" (click)="search()" [disabled]="fileToUpload == null"/>
-        <input *ngIf="!searching" class="btn btn-outline-secondary btn-block" type="button" value="Clear" (click)="clear()" [hidden]="fileToUpload == null"/>
+        <input *ngIf="!searching" class="btn btn-primary btn-block" type="button" value="Search" (click)="search()" [disabled]="face == null"/>
+        <input *ngIf="!searching" class="btn btn-outline-secondary btn-block" type="button" value="Clear" (click)="clear()" [hidden]="face == null"/>
       </form>
     </div>
   </div>
@@ -33,10 +33,13 @@
     <div class="col">
       <h1>Search results</h1>
       <div class="row" *ngFor="let file of results">
+        <div class="col-1" *ngIf="file.path !== undefined">
+          <input type="checkbox" (change)="changeStatus(file, $event)">
+        </div>
         <div class="col-2">
           <img [src]="getSafeUrl(file.path)" class="img-thumbnail" alt="result">
         </div>
-        <dl class="col-10">
+        <dl class="col-9">
           <dt class="col-sm-3">Link</dt>
           <dd class="col-sm-9"><a href="{{file.path}}" target="_blank">http://localhost/{{file.path}}</a></dd>
           <dt class="col-sm-3">Created</dt>
@@ -51,4 +54,11 @@
       </div>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col">
+      <input class="btn btn-outline-secondary btn-block" type="button" value="Log selected paths" (click)="printSelectedPaths()" *ngIf="results.length > 0"/>
+    </div>
+  </div>
+
 </div>

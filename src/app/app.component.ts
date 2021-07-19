@@ -10,7 +10,7 @@ import {environment} from '../environments/environment';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  fileToUpload: any;
+  face?: string = '';
   originalFile?: File;
   results: Array<Result> = [];
   searching = false;
@@ -34,7 +34,9 @@ export class AppComponent {
         fileReader.onloadend = e => {
           // @ts-ignore
           this.identifyService.detectFace({image: fileReader.result}).toPromise()
-            .then(() => (this.fileToUpload = fileReader.result))
+            .then((result) => {
+              this.face = 'data:image/png;base64,' + result
+            })
             .catch(err => {
               if (err.code === 404) {
                 this.toastr.warning('No faces found in uploaded photo. Please try another!', 'No faces', {positionClass: 'toast-bottom-full-width'});
@@ -49,8 +51,8 @@ export class AppComponent {
   search(): void {
     this.results = [];
     this.searching = true;
-    if (this.fileToUpload) {
-      this.identifyService.findSimilar(this.threshold, { image: this.fileToUpload, path: environment.path}).toPromise().then(paths => {
+    if (this.face) {
+      this.identifyService.findSimilar(this.threshold, { image: this.face, path: environment.path}).toPromise().then(paths => {
         if (paths.images != null && paths.images.length > 0) {
           paths.images.map(value => {
             if (value.createdDate !== undefined) {
@@ -80,7 +82,7 @@ export class AppComponent {
   clear(): void {
     this.results = [];
     this.originalFile = undefined;
-    this.fileToUpload = null;
+    this.face = undefined;
   }
 
   changeThreshold(event: any): void {
@@ -94,4 +96,12 @@ export class AppComponent {
     return  this.domSanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
+  changeStatus(file: Result, event: any): void {
+    file.selected = event.target.checked;
+    console.log(file.selected);
+  }
+
+  printSelectedPaths(): void {
+    console.log(this.results.filter(r => r.selected === true).map(r => `cp ${r.path} $DEST`).join("\n"));
+  }
 }

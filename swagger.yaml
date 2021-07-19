@@ -60,7 +60,9 @@ paths:
             $ref: "#/definitions/Request"
       responses:
         200:
-          description: "successful operation"
+          description: "detected face as base64 image"
+          schema:
+            type: string
         404:
           description: "no person found on photo"
         500:
@@ -96,6 +98,10 @@ definitions:
       threshold:
         type: number
         example: 0.52
+      selected:
+        type: boolean
+        example: false
+        default: false
   Request:
     type: object
     properties:

@@ -7,6 +7,7 @@ export const environment = {
   serverUrl: 'http://localhost/sille',
   // either path to a file or path to folder containing files.
   // since the images are by default mapped to ./images folder in the container, the path should start with ./images
+  // only works with proxy container that creates a webserver on top of the images folder
   path: 'images'
 };
 
